@@ -10,10 +10,6 @@
     "start": "node dist/index.js",
     "test": "mocha -r dotenv/config"
   },
-  "engines": {
-    "node": "16.x",
-    "npm": "8.x"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Czechitas-podklady-WEB/nakupy-app.git"
