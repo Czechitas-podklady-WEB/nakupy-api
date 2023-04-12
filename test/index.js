@@ -70,3 +70,18 @@ describe('GET /api/me/week', () => {
     expect(response.body).to.have.property('result').that.is.an('array');
   });
 });
+
+describe('GET /api/me/week/mon', () => {
+  it('should return resource for a day', async () => {
+    const response = await request
+      .get('/api/me/week/mon')
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200);
+
+    expect(response.body).to.have.property('status').that.equals('success');
+    expect(response.body).to.have.property('result').that.is.an('object');
+    expect(response.body.result).to.have.property('id', 'mon');
+    expect(response.body.result).to.have.property('dayName', 'Pondělí');
+    expect(response.body.result).to.have.property('items').that.is.an('array').of.length(7);
+  });
+});
