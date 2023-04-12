@@ -10,6 +10,30 @@ const request = supertest(
 
 const token = process.env.TEST_AUTH_TOKEN;
 
+describe('CORS for /api', () => {
+  it('should allow all origins', async function() {
+    const response = await request
+      .options('/api')
+      .set('Origin', 'https://example.com')
+      .expect(204);
+
+    expect(response.headers).to.have.property('access-control-allow-origin', '*');
+  });
+});
+
+describe('GET /api', () => {
+  it('should return a greeting resource', async function() {
+    const response = await request
+      .get('/api')
+      .expect(200);
+
+    expect(response.body).to.have.property('status').that.equals('success');
+    expect(response.body).to.have.property('result');
+    expect(response.body.result).to.have.property('id', 'root');
+    expect(response.body.result).to.have.property('message');
+  });
+});
+
 describe('GET /api/sampleweek', () => {
   it('should return an array of days', async () => {
     const response = await request

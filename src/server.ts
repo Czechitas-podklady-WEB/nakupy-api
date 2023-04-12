@@ -3,6 +3,7 @@ import { weekController } from './controllers/week-controller.js';
 import { findUser, users } from './controllers/users-db.js';
 import { kodimAuth } from '@kodim/auth';
 import jsonder from 'jsonder';
+import { success } from 'monadix/result';
 
 interface ServerOptions {
   serverUrl: string;
@@ -21,7 +22,18 @@ export const createServer = ({ serverUrl }: ServerOptions) => {
     }
   });
       
-  server.use('api', api.middleware());
+  server.use('/api', api.middleware());
+
+  server.get('/api',
+    api.endpoint({
+      resourceType: 'root',
+      handler: () => success({
+        id: 'root',
+        message: 'Welcome to the Nákupy API',
+        docs: `${serverUrl}/docs`,
+      }),
+    }),
+  );
 
   server.use('/api/sampleweek', weekController(api, { isSampleWeek: true }));
 
