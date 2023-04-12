@@ -1,9 +1,17 @@
 import express from 'express';
 import { weekController } from './controllers/week-controller.js';
-import { findUser, users } from './controllers/users-db.js';
+import { findUser, users, User } from './controllers/users-db.js';
 import { kodimAuth } from '@kodim/auth';
 import jsonder from 'jsonder';
 import { success } from 'monadix/result';
+
+declare global {
+  namespace Express {
+    export interface Request {
+      apiUser?: User;
+    }
+  }
+}
 
 interface ServerOptions {
   serverUrl: string;
@@ -38,6 +46,25 @@ export const createServer = ({ serverUrl }: ServerOptions) => {
   server.use('/api/sampleweek', weekController(api, { isSampleWeek: true }));
 
   server.use('/api/me', kodimAuth());
+
+  server.use(
+    '/api/me',
+    (req, res, next) => {
+      findUser(req.user!.email).match({
+        success(user) {
+          req.apiUser = user;
+          next();
+        },
+        fail() {
+          api.sendFail(res, {
+            status: 500,
+            code: 'internal_error',
+            detail: 'User not found',
+          })
+        },
+      });
+    },
+  );
 
   server.get(
     '/api/me',

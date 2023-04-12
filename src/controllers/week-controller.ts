@@ -26,17 +26,20 @@ interface WeekControllerOptions {
   isSampleWeek: boolean;
 }
 
+const defaultWeek = createDefaultWeek();
+
 export const weekController = (api: Jsonder, options: WeekControllerOptions): Router => {
   const { isSampleWeek } = options;
   const router = express.Router();
 
-  if (isSampleWeek) {
-    const week = createDefaultWeek();
-    router.use((req, res, next) => {
-      req.week = week;
-      next();
-    });
-  }
+  router.use((req, res, next) => {
+    if (isSampleWeek) {
+      req.week = defaultWeek;
+    } else {
+      req.week = req.apiUser!.week;
+    }
+    next();
+  });
   
   router.get('/', api.endpoint({
     resourceType: 'week',
