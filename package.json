@@ -10,12 +10,16 @@
     "start": "node dist/index.js",
     "test": "mocha -r dotenv/config"
   },
+  "engines": {
+    "node": ">= 16.0.0",
+    "npm": ">= 9.0.0"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Czechitas-podklady-WEB/nakupy-app.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Martin Podloucký",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Czechitas-podklady-WEB/nakupy-app/issues"
