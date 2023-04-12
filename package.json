@@ -2,7 +2,7 @@
   "name": "nakupy-app",
   "version": "1.0.0",
   "description": "Webová aplikace nakupy pro nácvik komunikace s API",
-  "main": "index.js",
+  "main": "server/index.js",
   "type": "module",
   "scripts": {
     "dev": "tsc -w",
