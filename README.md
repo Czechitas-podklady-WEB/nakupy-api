@@ -1,2 +1,3 @@
-# nakupy-app
-Webová aplikace nakupy pro nácvik komunikace s API
+# Nákupy API
+
+API k cvičné webová aplikaci Nákupy.
