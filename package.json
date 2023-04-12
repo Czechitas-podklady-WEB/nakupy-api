@@ -11,8 +11,8 @@
     "test": "mocha -r dotenv/config"
   },
   "engines": {
-    "node": ">= 16.0.0",
-    "npm": ">= 9.0.0"
+    "node": "16.x",
+    "npm": "9.x"
   },
   "repository": {
     "type": "git",

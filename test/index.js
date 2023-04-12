@@ -17,7 +17,10 @@ describe('GET /api/sampleweek', () => {
       .expect(200);
 
     expect(response.body).to.have.property('status').that.equals('success');
-    expect(response.body).to.have.property('result').that.is.an('array');
+    expect(response.body)
+      .to.have.property('result')
+      .that.is.an('array')
+      .and.has.lengthOf(7);
   });
 });
 
