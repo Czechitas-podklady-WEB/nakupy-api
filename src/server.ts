@@ -1,6 +1,6 @@
 import express from 'express';
-import { weekController } from './controllers/week-controller.js';
-import { findUser, users, User } from './controllers/users-db.js';
+import { weekController } from './week-controller.js';
+import { findUser, users, User } from './db/users.js';
 import { kodimAuth } from '@kodim/auth';
 import jsonder from 'jsonder';
 import { success } from 'monadix/result';

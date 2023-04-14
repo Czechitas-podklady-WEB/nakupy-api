@@ -1,8 +1,8 @@
 import { Day } from './week.js';
-import { ProductItemData } from "./product-list.js";
+import { ItemAttributes } from "./product-list.js";
 
 export type DefaultWeek = {
-  [D in Day]: ProductItemData[];
+  [D in Day]: ItemAttributes[];
 }
 
 export const defaultWeek: DefaultWeek = {

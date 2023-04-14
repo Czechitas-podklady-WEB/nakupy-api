@@ -4,7 +4,7 @@ import { Result, success, fail } from 'monadix/result';
 const ID_SIZE = 8;
 const MAX_ITEMS = 64;
 
-export interface ProductItemData {
+export interface ItemAttributes {
   product: string,
   amount: number,
   unit: string,
@@ -13,7 +13,7 @@ export interface ProductItemData {
 
 export type ProductItem = {
   id: string,
-} & ProductItemData;
+} & ItemAttributes;
 
 export interface ProductList {
   id: string,
@@ -38,24 +38,24 @@ export const findItem = (
   (index) => list.items[index]
 );
 
-export const createItem = (itemData: ProductItemData): ProductItem => ({
+export const createItem = (attres: ItemAttributes): ProductItem => ({
   id: nanoid(ID_SIZE),
-  ...itemData,
+  ...attres,
 });
 
 export const addItem = (
-  list: ProductList, itemData: ProductItemData,
+  list: ProductList, attrs: ItemAttributes,
 ): Result<ProductList, 'max-items'> => {
   if (list.items.length === MAX_ITEMS) {
     return fail('max-items');
   }
   
-  list.items.push(createItem(itemData));
+  list.items.push(createItem(attrs));
   return success(list);
 };
 
 export const updateItem = (
-  list: ProductList, itemId: string, values: Partial<ProductItemData>,
+  list: ProductList, itemId: string, values: Partial<ItemAttributes>,
 ): Result<ProductItem, 'not-found'> => findItemIndex(list, itemId).map(
   (index) => {
     const item = list.items[index];

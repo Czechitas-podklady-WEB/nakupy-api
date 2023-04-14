@@ -1,6 +1,5 @@
 import { nanoid } from "nanoid";
-import { createDefaultWeek } from "../lists/weeks.js";
-import { Week } from "../lists/week.js";
+import { Week, createDefaultWeek } from "./week.js";
 import { Result, fromNullable } from "monadix/result";
 
 export interface User {

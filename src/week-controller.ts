@@ -8,11 +8,11 @@ import {
   findItem,
   MoveDirection,
   moveItem,
-  ProductItemData,
+  ItemAttributes,
   updateItem
-} from '../lists/product-list.js';
-import { days, Day, isDay, Week } from '../lists/week.js';
-import { createDefaultList, createDefaultWeek, createEmptyList } from '../lists/weeks.js';
+} from './db/product-list.js';
+import { days, Day, Week } from './db/week.js';
+import { createDefaultList, createDefaultWeek, createEmptyList } from './db/week.js';
 
 declare global {
   namespace Express {
@@ -121,7 +121,7 @@ export const weekController = (api: Jsonder, options: WeekControllerOptions): Ro
         }),
       },
       handler: (req) => {
-        const itemData = req.body as Partial<ProductItemData>;
+        const itemData = req.body as Partial<ItemAttributes>;
         const day = req.params.day as Day;
         const list = req.week![day];
         const { itemId } = req.params;
@@ -195,7 +195,7 @@ export const weekController = (api: Jsonder, options: WeekControllerOptions): Ro
         }),
       },
       handler: (req) => {
-        const itemData = req.body as ProductItemData;
+        const itemData = req.body as ItemAttributes;
         const { day } = req.params;
         
         const list = req.week![day as Day];

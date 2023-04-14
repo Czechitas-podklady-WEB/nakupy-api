@@ -1,13 +1,30 @@
-import { Day, Week, dayNames } from "./week.js";
 import { defaultWeek } from "./default-data.js";
 import { createItem, ProductList } from "./product-list.js";
+
+export const days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const;
+
+export type Day = typeof days[number];
+
+export type Week = {
+  [D in Day]: ProductList;
+};
+
+export const dayNames = {
+  mon: 'Pondělí',
+  tue: 'Úterý',
+  wed: 'Středa',
+  thu: 'Čtvrtek',
+  fri: 'Pátek',
+  sat: 'Sobota',
+  sun: 'Neděle',
+};
 
 export const createDefaultList = (day: Day): ProductList => {
   return {
     id: day,
     dayName: dayNames[day],
     items: defaultWeek[day].map(
-      (itemData) => createItem(itemData)
+      (attrs) => createItem(attrs)
     ),
   };
 };
