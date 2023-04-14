@@ -85,3 +85,42 @@ describe('GET /api/me/week/mon', () => {
     expect(response.body.result).to.have.property('items').that.is.an('array').of.length(7);
   });
 });
+
+describe('GET /api/me/week/mon/items/D90gKF7I', () => {
+  it('should return item with a given id', async () => {
+    const response = await request
+      .get('/api/me/week/mon/items/D90gKF7I')
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200);
+
+    expect(response.body).to.have.property('status').that.equals('success');
+    expect(response.body).to.have.property('result').that.deep.equals({
+      id: 'D90gKF7I',
+      product: 'Rohlíky',
+      amount: 10,
+      unit: 'ks',
+      done: true,
+      url: `${serverUrl}/api/me/week/mon/items/D90gKF7I`,
+    });
+  });
+});
+
+describe('PATCH /api/me/week/mon/items/D90gKF7I', () => {
+  it('should set item with id D90gKF7I as not done', async () => {
+    const response = await request
+      .patch('/api/me/week/mon/items/D90gKF7I')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ done: false})
+      .expect(200);
+
+    expect(response.body).to.have.property('status').that.equals('success');
+    expect(response.body).to.have.property('result').that.deep.equals({
+      id: 'D90gKF7I',
+      product: 'Rohlíky',
+      amount: 10,
+      unit: 'ks',
+      done: false,
+      url: `${serverUrl}/api/me/week/mon/items/D90gKF7I`,
+    });
+  });
+});
