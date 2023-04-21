@@ -23,7 +23,7 @@ export const createDefaultList = (day: Day): ProductList => {
   return {
     id: day,
     dayName: dayNames[day],
-    items: defaultWeek[day],
+    items: [...defaultWeek[day]],
   };
 };
 
