@@ -1,6 +1,6 @@
 import { nanoid } from "nanoid";
 import { Week, createDefaultWeek } from "./week.js";
-import { Result, fromNullable } from "monadix/result";
+import { Result, success, fromNullable } from "monadix/result";
 
 export interface User {
   id: string,
@@ -19,3 +19,14 @@ export const users: User[] = [
 export const findUser = (email: string): Result<User, 'not-found'> => fromNullable(
   users.find((user) => user.email === email), 'not-found',
 );
+
+export const createUser = (email: string): Result<User, never> => {
+  const user = {
+    id: nanoid(8),
+    email,
+    week: createDefaultWeek(),
+  };
+
+  users.push(user);
+  return success(user);
+}

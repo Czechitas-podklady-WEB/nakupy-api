@@ -1,6 +1,6 @@
 import express from 'express';
 import { weekController } from './week-controller.js';
-import { findUser, users, User } from './db/users.js';
+import { findUser, createUser, User } from './db/users.js';
 import { kodimAuth } from '@kodim/auth';
 import jsonder from 'jsonder';
 import { success } from 'monadix/result';
@@ -56,11 +56,19 @@ export const createServer = ({ serverUrl }: ServerOptions) => {
           next();
         },
         fail() {
-          api.sendFail(res, {
-            status: 500,
-            code: 'internal_error',
-            detail: 'User not found',
-          })
+          createUser(req.user!.email).match({
+            success(user) {
+              req.apiUser = user;
+              next();
+            },
+            fail() {
+              res.status(500).send({
+                status: 500,
+                code: 'user-creation-failed',
+                detail: 'User creation failed',
+              });
+            },
+          });  
         },
       });
     },
