@@ -1,6 +1,7 @@
 import express from 'express';
 import { weekController } from './week-controller.js';
 import { findUser, createUser, User } from './db/users.js';
+import { initRecipes } from './db/recipes.js';
 import { kodimAuth } from '@kodim/auth';
 import jsonder from 'jsonder';
 import { success } from 'monadix/result';
@@ -20,9 +21,9 @@ interface ServerOptions {
 export const createServer = ({ serverUrl }: ServerOptions) => {
   const server = express();
 
-// server.use(`${baseUrl}/docs`, express.static('docs/_site', {
-//   extensions: ['html'],
-// }));
+  server.use(`/assets/recipes`, express.static('public/assets/recipes', {
+    extensions: ['png'],
+  }));
 
   const api = jsonder({
     generateUrls: {
@@ -88,6 +89,16 @@ export const createServer = ({ serverUrl }: ServerOptions) => {
 
   server.use('/api/me/week',
     weekController(api, { isSampleWeek: false }),
+  );
+
+  const recipes = initRecipes(serverUrl);
+
+  server.get(
+    '/api/me/recipes', 
+    api.endpoint({
+      resourceType: 'recipe',
+      handler: () => success(recipes),
+    }),
   );
 
   return server;

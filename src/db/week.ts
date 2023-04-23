@@ -1,5 +1,5 @@
 import { defaultWeek } from "./default-data.js";
-import { createItem, ProductList } from "./product-list.js";
+import { ProductList } from "./product-list.js";
 
 export const days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const;
 
@@ -23,7 +23,7 @@ export const createDefaultList = (day: Day): ProductList => {
   return {
     id: day,
     dayName: dayNames[day],
-    items: [...defaultWeek[day]],
+    items: structuredClone(defaultWeek[day]),
   };
 };
 
