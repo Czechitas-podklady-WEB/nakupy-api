@@ -1,8 +1,6 @@
 import express from 'express';
 import { weekController } from './week-controller.js';
 import { findUser, createUser, User } from './db/users.js';
-import { initRecipes } from './db/recipes.js';
-import { kodimAuth } from '@kodim/auth';
 import jsonder from 'jsonder';
 import { success } from 'monadix/result';
 
@@ -45,19 +43,27 @@ export const createServer = ({ serverUrl }: ServerOptions) => {
   );
 
   server.use('/api/sampleweek', weekController(api, { isSampleWeek: true }));
-
-  server.use('/api/me', kodimAuth());
-
+  
   server.use(
     '/api/me',
     (req, res, next) => {
-      findUser(req.user!.email).match({
+      const login = req.headers.authorization;
+      if (!login) {
+        res.status(401).send({
+          status: 401,
+          code: 'unauthorized',
+          detail: 'Unauthorized',
+        });
+        return;
+      }
+
+      findUser(login).match({
         success(user) {
           req.apiUser = user;
           next();
         },
         fail() {
-          createUser(req.user!.email).match({
+          createUser(login).match({
             success(user) {
               req.apiUser = user;
               next();
@@ -79,7 +85,7 @@ export const createServer = ({ serverUrl }: ServerOptions) => {
     '/api/me',
     api.endpoint({
       resourceType: 'user',
-      handler: (req) => findUser(req.user!.email).orElse(() => ({
+      handler: (req) => findUser(req.headers.authorization ?? '').orElse(() => ({
         status: 404,
         code: 'not_found',
         detail: 'User not found',
@@ -89,16 +95,6 @@ export const createServer = ({ serverUrl }: ServerOptions) => {
 
   server.use('/api/me/week',
     weekController(api, { isSampleWeek: false }),
-  );
-
-  const recipes = initRecipes(serverUrl);
-
-  server.get(
-    '/api/me/recipes', 
-    api.endpoint({
-      resourceType: 'recipe',
-      handler: () => success(recipes),
-    }),
   );
 
   return server;
